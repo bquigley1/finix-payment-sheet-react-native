@@ -1,0 +1,51 @@
+{
+  "name": "finix-payment-sheet-react-native",
+  "version": "0.1.0",
+  "description": "React Native module for Finix payment sheet integration with iOS and Android support",
+  "main": "index.ts",
+  "types": "src/FinixPaymentModule.ts",
+  "scripts": {
+    "build": "expo-module build",
+    "clean": "expo-module clean",
+    "test": "expo-module test",
+    "prepare": "expo-module prepare",
+    "prepublishOnly": "expo-module prepublishOnly",
+    "expo-module": "expo-module"
+  },
+  "keywords": [
+    "react-native",
+    "expo",
+    "finix",
+    "payment",
+    "payment-sheet",
+    "ios",
+    "android",
+    "finix-payments"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bquigley1/finix-payment-sheet-react-native.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bquigley1/finix-payment-sheet-react-native/issues"
+  },
+  "author": "Bennett Quigley <your-email@example.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/bquigley1/finix-payment-sheet-react-native#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "expo-modules-core": "~1.12.0"
+  },
+  "peerDependencies": {
+    "expo": "*",
+    "expo-modules-core": "*",
+    "react": "*",
+    "react-native": "*"
+  },
+  "expo": {
+    "modulesClassNames": {
+      "ios": "FinixPaymentModule",
+      "android": "expo.modules.finixpaymentmodule.FinixPaymentModule"
+    }
+  }
+}

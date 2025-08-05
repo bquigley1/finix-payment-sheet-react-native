@@ -1,0 +1,337 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.10 (swiftlang-5.10.0.13 clang-1500.3.9.4)
+// swift-module-flags: -target arm64-apple-ios11.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-bare-slash-regex -module-name FinixPaymentSheet
+import DeveloperToolsSupport
+import Foundation
+import Swift
+import SwiftUI
+import UIKit
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+public protocol AddressProtocol {
+  var line1: Swift.String { get }
+  var line2: Swift.String? { get }
+  var city: Swift.String { get }
+  var region: Swift.String { get }
+  var postalCode: Swift.String { get }
+  var country: Swift.String { get }
+}
+public struct Address : FinixPaymentSheet.AddressProtocol {
+  public init(line1: Swift.String, line2: Swift.String? = nil, city: Swift.String, region: Swift.String, postalCode: Swift.String, country: Swift.String)
+  public let line1: Swift.String
+  public let line2: Swift.String?
+  public let city: Swift.String
+  public let region: Swift.String
+  public let postalCode: Swift.String
+  public let country: Swift.String
+  public init(address: any FinixPaymentSheet.AddressProtocol)
+}
+extension FinixPaymentSheet.Address : Swift.Encodable {
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+public struct Card {
+  public init(name: Swift.String, cardNumber: Swift.String, expiration: FinixPaymentSheet.Expiration, securityCode: Swift.String)
+}
+public struct Expiration {
+  public init(month: Swift.Int, year: Swift.Int)
+}
+public typealias BasicCard = FinixPaymentSheet.Card
+public typealias PartialCard = FinixPaymentSheet.Card
+public typealias CompleteCard = FinixPaymentSheet.Card
+public struct MinimalCard {
+}
+public enum BankAccountType : Swift.String, Swift.Codable, Swift.CaseIterable {
+  case personalChecking
+  case personalSavings
+  case businessChecking
+  case businessSavings
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [FinixPaymentSheet.BankAccountType]
+  public typealias RawValue = Swift.String
+  public static var allCases: [FinixPaymentSheet.BankAccountType] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+extension Swift.RandomAccessCollection {
+  public func bisectToFirstIndex(where predicate: (Self.Element) throws -> Swift.Bool) rethrows -> Self.Index?
+}
+public struct TokenResponse : Swift.Decodable {
+  public let id: Swift.String
+  public let fingerprint: Swift.String
+  public let created: Foundation.Date
+  public let updated: Foundation.Date
+  public let instrument: FinixPaymentSheet.PaymentInstrumentType
+  public let expires: Foundation.Date
+  public let isoCurrency: FinixPaymentSheet.ISOCurrency
+  public init(from decoder: any Swift.Decoder) throws
+}
+public enum PaymentInstrumentType : Swift.String, Swift.Codable {
+  case card
+  case bank
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum ISOCurrency : Swift.String, Swift.Decodable {
+  case USD
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum FinixAPIEndpoint {
+  case Sandbox
+  case Live
+  public static func == (a: FinixPaymentSheet.FinixAPIEndpoint, b: FinixPaymentSheet.FinixAPIEndpoint) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct FinixCredentials {
+  public let applicationId: Swift.String
+  public let environment: FinixPaymentSheet.FinixAPIEndpoint
+  public init(applicationId: Swift.String, environment: FinixPaymentSheet.FinixAPIEndpoint)
+}
+public struct FinixError : Swift.Error {
+  public let code: FinixPaymentSheet.FinixError.Code
+  public let message: Swift.String
+  public enum Code {
+    case Unknown
+    case SDKNotInitialized
+    case CardReaderNotConnected
+    case CannotEncodeParameters
+    case CannotDecodeResponse
+    case MalformedRequest
+    case RequestFailed(_: Swift.Int)
+    case InitializationError
+    case FailedToParseAuthorizationResponse
+    case AuthorizationFailure(_: any Swift.Error)
+    case AuthorizationFailureMissingResponse
+    case RefundRequestFailed
+    case RefundRequestFailedWithError(_: any Swift.Error)
+    case CardInputError
+    case InvalidCurrencyCode
+    case NoCardData
+  }
+}
+public class PaymentAction {
+  public init(credentials: FinixPaymentSheet.FinixCredentials, delegate: (any FinixPaymentSheet.PaymentActionDelegate)? = nil, configuration: FinixPaymentSheet.PaymentInputController.Configuration? = nil)
+  public var configuration: FinixPaymentSheet.PaymentInputController.Configuration
+  public var localization: FinixPaymentSheet.PaymentInputController.Localization
+  weak public var delegate: (any FinixPaymentSheet.PaymentActionDelegate)?
+  @objc deinit
+}
+extension FinixPaymentSheet.PaymentAction {
+  public func paymentSheet(style: FinixPaymentSheet.PaymentInputController.Style, theme: any FinixPaymentSheet.ColorThemeProtocol = ColorTheme.default, showCancelButton: Swift.Bool = true, showCancelItem: Swift.Bool = true, card: FinixPaymentSheet.Card? = nil, showCountry: Swift.Bool = false, address: (any FinixPaymentSheet.AddressProtocol)? = nil) -> FinixPaymentSheet.PaymentInputController
+  public func present(from presenter: UIKit.UIViewController, paymentSheet: FinixPaymentSheet.PaymentInputController, animated: Swift.Bool = true)
+}
+extension FinixPaymentSheet.PaymentAction {
+  public func bankPaymentSheet(showCancelButton: Swift.Bool = true, showCancelItem: Swift.Bool = true, accountType: FinixPaymentSheet.BankAccountType? = nil) -> FinixPaymentSheet.PaymentInputController
+}
+extension FinixPaymentSheet.PaymentAction : FinixPaymentSheet.PaymentActionDelegate {
+  public func didSucceed(paymentController: FinixPaymentSheet.PaymentInputController, instrument: FinixPaymentSheet.TokenResponse)
+  public func didCancel(paymentController: FinixPaymentSheet.PaymentInputController)
+  public func didFail(paymentController: FinixPaymentSheet.PaymentInputController, error: any Swift.Error)
+}
+public protocol PaymentActionDelegate : AnyObject {
+  func didSucceed(paymentController: FinixPaymentSheet.PaymentInputController, instrument: FinixPaymentSheet.TokenResponse)
+  func didCancel(paymentController: FinixPaymentSheet.PaymentInputController)
+  func didFail(paymentController: FinixPaymentSheet.PaymentInputController, error: any Swift.Error)
+}
+extension FinixPaymentSheet.PaymentInputController {
+  public enum Style {
+    case complete
+    case partial
+    case basic
+    case minimal
+    case basicBank
+    public static func == (a: FinixPaymentSheet.PaymentInputController.Style, b: FinixPaymentSheet.PaymentInputController.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public enum ACHStyle {
+    case basic
+    public static func == (a: FinixPaymentSheet.PaymentInputController.ACHStyle, b: FinixPaymentSheet.PaymentInputController.ACHStyle) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension FinixPaymentSheet.PaymentInputController {
+  public struct Branding {
+    public init(image: UIKit.UIImage? = nil, title: Swift.String? = nil)
+  }
+  public struct Configuration {
+    public init(title: Swift.String?, branding: FinixPaymentSheet.PaymentInputController.Branding, buttonTitle: Swift.String)
+    public let title: Swift.String?
+    public let branding: FinixPaymentSheet.PaymentInputController.Branding
+    public let buttonTitle: Swift.String
+  }
+}
+public protocol PaymentSheetErrorLocalizationProtocol {
+  var cardNumberInvalidCharacters: Swift.String { get }
+  var invalidCardNumber: Swift.String { get }
+  var selectBankAccountType: Swift.String { get }
+  var invalidSelection: Swift.String { get }
+  var expiryEnterMonthAndYear: Swift.String { get }
+  var expiryInvalidCharacters: Swift.String { get }
+  var expiryMonthRange: Swift.String { get }
+  var expiryYearFormat: Swift.String { get }
+  var expiryInThePast: Swift.String { get }
+  var regionEnterState: Swift.String { get }
+  var invalidInput: Swift.String { get }
+  var minimumLengthRequired: Swift.String { get }
+}
+public protocol PaymentSheetLocalizationProtocol : FinixPaymentSheet.PaymentSheetErrorLocalizationProtocol {
+  var nameTitle: Swift.String { get }
+  var addressTitle: Swift.String { get }
+  var addressLine2Title: Swift.String { get }
+  var cityTitle: Swift.String { get }
+  var regionTitle: Swift.String { get }
+  var postalCodeTitle: Swift.String { get }
+  var cardNumberTitle: Swift.String { get }
+  var cardExpiryTitle: Swift.String { get }
+  var cardCVVTitle: Swift.String { get }
+  var bankAccountNumberTitle: Swift.String { get }
+  var bankRoutingNumberTitle: Swift.String { get }
+  var bankAccountTypeTitle: Swift.String { get }
+  var countryRegionTitle: Swift.String { get }
+  var namePlaceholder: Swift.String { get }
+  var addressPlaceholder: Swift.String { get }
+  var addressLine2Placeholder: Swift.String { get }
+  var cityPlaceholder: Swift.String { get }
+  var regionPlaceholder: Swift.String { get }
+  var postalCodePlaceholder: Swift.String { get }
+  var cardNumberPlaceholder: Swift.String { get }
+  var cardExpiryPlaceholder: Swift.String { get }
+  var cardCVVPlaceholder: Swift.String { get }
+  var bankAccountNumberPlaceholder: Swift.String { get }
+  var bankRoutingNumberPlaceholder: Swift.String { get }
+  var bankAccountTypePlaceholder: Swift.String { get }
+  var bankAccountPersonalChecking: Swift.String { get }
+  var bankAccountPersonalSavings: Swift.String { get }
+  var bankAccountBusinessChecking: Swift.String { get }
+  var bankAccountBusinessSavings: Swift.String { get }
+}
+extension FinixPaymentSheet.PaymentInputController {
+  public struct Localization : FinixPaymentSheet.PaymentSheetLocalizationProtocol {
+    public init(cardNumberInvalidCharacters: Swift.String = "Card numbers can only contain 0-9.", invalidCardNumber: Swift.String = "Please enter valid card number.", selectBankAccountType: Swift.String = "Please select account type.", invalidSelection: Swift.String = "Invalid selection.", expiryEnterMonthAndYear: Swift.String = "Enter month and year.", expiryInvalidCharacters: Swift.String = "Invalid characters.", expiryMonthRange: Swift.String = "Month must be 1-12.", expiryYearFormat: Swift.String = "Enter year (YY).", expiryInThePast: Swift.String = "Expiry in the past.", regionEnterState: Swift.String = "Enter state.", invalidInput: Swift.String = "Invalid characters.", minimumLengthRequired: Swift.String = "Minimum of %@ required.", nameTitle: Swift.String = "Name", addressTitle: Swift.String = "Address", addressLine2Title: Swift.String = "Line 2", cityTitle: Swift.String = "City", regionTitle: Swift.String = "State", postalCodeTitle: Swift.String = "Postal Code", cardNumberTitle: Swift.String = "Card Number", cardExpiryTitle: Swift.String = "Expiry", cardCVVTitle: Swift.String = "CVV/CVC", bankAccountNumberTitle: Swift.String = "Account Number", bankRoutingNumberTitle: Swift.String = "Routing Number", bankAccountTypeTitle: Swift.String = "Account Type", countryRegionTitle: Swift.String = "Country or Region", namePlaceholder: Swift.String = "First Last", addressPlaceholder: Swift.String = "123 Main Street", addressLine2Placeholder: Swift.String = "#1", cityPlaceholder: Swift.String = "City", regionPlaceholder: Swift.String = "CA", postalCodePlaceholder: Swift.String = "00000", cardNumberPlaceholder: Swift.String = "0000 0000 0000 0000", cardExpiryPlaceholder: Swift.String = "MM/YY", cardCVVPlaceholder: Swift.String = "111", bankAccountNumberPlaceholder: Swift.String = "00000", bankRoutingNumberPlaceholder: Swift.String = "000000000", bankAccountTypePlaceholder: Swift.String = "Checking/Savings", bankAccountPersonalChecking: Swift.String = "Personal Checking", bankAccountPersonalSavings: Swift.String = "Personal Savings", bankAccountBusinessChecking: Swift.String = "Business Checking", bankAccountBusinessSavings: Swift.String = "Business Savings")
+    public var cardNumberInvalidCharacters: Swift.String
+    public var invalidCardNumber: Swift.String
+    public var selectBankAccountType: Swift.String
+    public var invalidSelection: Swift.String
+    public var expiryEnterMonthAndYear: Swift.String
+    public var expiryInvalidCharacters: Swift.String
+    public var expiryMonthRange: Swift.String
+    public var expiryYearFormat: Swift.String
+    public var expiryInThePast: Swift.String
+    public var regionEnterState: Swift.String
+    public var invalidInput: Swift.String
+    public var minimumLengthRequired: Swift.String
+    public var nameTitle: Swift.String
+    public var addressTitle: Swift.String
+    public var addressLine2Title: Swift.String
+    public var cityTitle: Swift.String
+    public var regionTitle: Swift.String
+    public var postalCodeTitle: Swift.String
+    public var cardNumberTitle: Swift.String
+    public var cardExpiryTitle: Swift.String
+    public var cardCVVTitle: Swift.String
+    public var bankAccountNumberTitle: Swift.String
+    public var bankRoutingNumberTitle: Swift.String
+    public var bankAccountTypeTitle: Swift.String
+    public var countryRegionTitle: Swift.String
+    public var namePlaceholder: Swift.String
+    public var addressPlaceholder: Swift.String
+    public var addressLine2Placeholder: Swift.String
+    public var cityPlaceholder: Swift.String
+    public var regionPlaceholder: Swift.String
+    public var postalCodePlaceholder: Swift.String
+    public var cardNumberPlaceholder: Swift.String
+    public var cardExpiryPlaceholder: Swift.String
+    public var cardCVVPlaceholder: Swift.String
+    public var bankAccountNumberPlaceholder: Swift.String
+    public var bankRoutingNumberPlaceholder: Swift.String
+    public var bankAccountTypePlaceholder: Swift.String
+    public var bankAccountPersonalChecking: Swift.String
+    public var bankAccountPersonalSavings: Swift.String
+    public var bankAccountBusinessChecking: Swift.String
+    public var bankAccountBusinessSavings: Swift.String
+  }
+}
+public protocol ColorThemeProtocol : Swift.Equatable {
+  var surface: UIKit.UIColor { get }
+  var logoText: UIKit.UIColor { get }
+  var text: UIKit.UIColor { get }
+  var errorContainer: UIKit.UIColor { get }
+  var container: UIKit.UIColor { get }
+  var label: UIKit.UIColor { get }
+  var placeholder: UIKit.UIColor { get }
+  var errorLabel: UIKit.UIColor { get }
+  var tokenizeButton: UIKit.UIColor { get }
+  var tokenizeButtonText: UIKit.UIColor { get }
+  var cancelButton: UIKit.UIColor { get }
+  var cancelButtonText: UIKit.UIColor { get }
+}
+public struct ColorTheme : FinixPaymentSheet.ColorThemeProtocol {
+  public var surface: UIKit.UIColor
+  public var logoText: UIKit.UIColor
+  public var text: UIKit.UIColor
+  public var errorContainer: UIKit.UIColor
+  public var container: UIKit.UIColor
+  public var label: UIKit.UIColor
+  public var placeholder: UIKit.UIColor
+  public var errorLabel: UIKit.UIColor
+  public var tokenizeButton: UIKit.UIColor
+  public var tokenizeButtonText: UIKit.UIColor
+  public var cancelButton: UIKit.UIColor
+  public var cancelButtonText: UIKit.UIColor
+  public static let `default`: FinixPaymentSheet.ColorTheme
+  public static func == (a: FinixPaymentSheet.ColorTheme, b: FinixPaymentSheet.ColorTheme) -> Swift.Bool
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class PaymentInputController : UIKit.UITableViewController {
+  @_Concurrency.MainActor(unsafe) public var config: FinixPaymentSheet.PaymentInputController.Configuration? {
+    get
+    set
+  }
+  @_Concurrency.MainActor(unsafe) weak public var delegate: (any FinixPaymentSheet.PaymentActionDelegate)?
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func numberOfSections(in _: UIKit.UITableView) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func tableView(_: UIKit.UITableView, numberOfRowsInSection _: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func tableView(_ tableView: UIKit.UITableView, viewForFooterInSection _: Swift.Int) -> UIKit.UIView?
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func tableView(_ tableView: UIKit.UITableView, viewForHeaderInSection section: Swift.Int) -> UIKit.UIView?
+  @objc deinit
+}
+extension FinixPaymentSheet.PaymentInputController : UIKit.UITextFieldDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func textFieldShouldReturn(_ textField: UIKit.UITextField) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func textField(_ textField: UIKit.UITextField, shouldChangeCharactersIn range: Foundation.NSRange, replacementString string: Swift.String) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func textFieldShouldEndEditing(_ textField: UIKit.UITextField) -> Swift.Bool
+}
+extension FinixPaymentSheet.BankAccountType : Swift.Equatable {}
+extension FinixPaymentSheet.BankAccountType : Swift.Hashable {}
+extension FinixPaymentSheet.BankAccountType : Swift.RawRepresentable {}
+extension FinixPaymentSheet.PaymentInstrumentType : Swift.Equatable {}
+extension FinixPaymentSheet.PaymentInstrumentType : Swift.Hashable {}
+extension FinixPaymentSheet.PaymentInstrumentType : Swift.RawRepresentable {}
+extension FinixPaymentSheet.ISOCurrency : Swift.Equatable {}
+extension FinixPaymentSheet.ISOCurrency : Swift.Hashable {}
+extension FinixPaymentSheet.ISOCurrency : Swift.RawRepresentable {}
+extension FinixPaymentSheet.FinixAPIEndpoint : Swift.Equatable {}
+extension FinixPaymentSheet.FinixAPIEndpoint : Swift.Hashable {}
+extension FinixPaymentSheet.PaymentInputController.Style : Swift.Equatable {}
+extension FinixPaymentSheet.PaymentInputController.Style : Swift.Hashable {}
+extension FinixPaymentSheet.PaymentInputController.ACHStyle : Swift.Equatable {}
+extension FinixPaymentSheet.PaymentInputController.ACHStyle : Swift.Hashable {}

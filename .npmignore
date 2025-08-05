@@ -1,0 +1,38 @@
+# Source files that aren't needed in the published package
+example/
+docs/
+.github/
+
+# Development files
+.gitignore
+.eslintrc
+.prettierrc
+tsconfig.json
+jest.config.js
+
+# Build artifacts
+android/build/
+ios/build/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Testing
+coverage/
+__tests__/
+*.test.ts
+*.test.js
+
+# Temporary files
+*.tmp
+.cache/
