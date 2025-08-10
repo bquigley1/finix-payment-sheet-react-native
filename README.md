@@ -1,6 +1,7 @@
 # finix-payment-sheet-react-native
 
-React Native module for Finix payment sheet integration with full iOS and Android support.
+**Unofficial** React Native / Expo Turbo Module for integrating the **Finix Payment Sheet** on iOS and Android.
+Provides a unified JavaScript API to launch the Finix native payment sheet in both bare React Native and Expo (managed or bare) projects.
 
 ## Features
 
@@ -18,19 +19,6 @@ npm install finix-payment-sheet-react-native
 # or
 yarn add finix-payment-sheet-react-native
 ```
-
-### iOS Setup
-
-1. Install pods:
-```bash
-cd ios && pod install
-```
-
-2. The module includes the FinixPaymentSheet.xcframework which will be automatically linked.
-
-### Android Setup
-
-No additional setup required. The module will be automatically linked.
 
 ## Usage
 
